@@ -21,6 +21,8 @@ module Palmade
     autoload :Utils, 'palmade/cableguy/utils'
     autoload :VERSION, 'palmade/cableguy/version'
 
+    autoload :CapistranoTasks, 'palmade/cableguy/capistrano_tasks'
+
     def self.boot_cabler(app_path, opts = { })
       Palmade::Cableguy::Cabler.new(app_path, opts).boot
     end
