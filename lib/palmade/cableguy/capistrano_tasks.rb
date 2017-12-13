@@ -17,7 +17,7 @@ module Palmade::Cableguy
     end
 
     def set_defaults
-      set_if_empty :cableguy_target, 'development'
+      set_if_empty :cableguy_target, fetch(:stage)
 
       append :chruby_map_bins, 'cable'
       append :rbenv_map_bins, 'cable'
