@@ -92,8 +92,19 @@ module Palmade::Cableguy
       self.class.require_erb
 
       fcontents = File.read(file_path)
-      parsed = ERB.new(fcontents, nil, "-%>", "@output_buffer").result(binding)
+      parsed = ERB.new(fcontents, nil, '-%>', '@output_buffer').result(binding)
+
       parsed = special_parse(parsed)
+      parsed = translate_escaped(parsed)
+    end
+
+    def translate_escaped(parsed)
+      translate_map = {
+        '[%' => '<%',
+        '%]' => '%>'
+      }
+
+      parsed.gsub(/(\[\%)|(\%\])/, translate_map)
     end
 
     def special_parse(parsed, delim = [ '{', '}' ], cabling_only = false)

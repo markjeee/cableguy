@@ -60,3 +60,4 @@ test/**/test.sqlite3
 .cabling.yml
 .#*
 test/app/config/blog.yml
+test/test_apply

@@ -15,7 +15,11 @@ module TestHelper
   TEST_CABLING_PATH = File.join(CABLEGUY_TEST_PATH, 'cabling')
   TEST_CABLING_VALUES_PATH = File.join(CABLEGUY_TEST_PATH, '.cabling_values.yml')
 
+  TEST_CONFIG_YML = File.join(TEST_APP_ROOT, 'config/blog.yml')
+
   Palmade::Cableguy::Constants::DEFAULT_LOCK_PATH.replace('')
+
+  @@runtime_test_value = nil
 
   def self.configure(app_root = nil, options = { })
     opts = {
@@ -77,5 +81,19 @@ module TestHelper
     ret = yield
     DEFAULT_CABLING_PATH.replace(default_cabling_path)
     ret
+  end
+
+  def self.load_test_config_yml(runtime_test_value = nil)
+    fcontents = File.read(TEST_CONFIG_YML)
+
+    @@runtime_test_value = runtime_test_value
+    parsed = ERB.new(fcontents, nil, '-%>').result(binding)
+    @@runtime_test_value = nil
+
+    YAML.load(parsed)
+  end
+
+  def self.runtime_test_value
+    @@runtime_test_value
   end
 end

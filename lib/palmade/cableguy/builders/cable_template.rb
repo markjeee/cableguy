@@ -17,8 +17,8 @@ module Palmade::Cableguy
 
     def install_template(template_file, cabler, target_path = nil)
       templates_apply_path = cabler.determine_apply_path(:for_templates => true)
+      template_path = determine_template_path(cabler, template_file)
 
-      template_path = File.join(cabler.templates_path, template_file)
       if target_path.nil?
         target_path = File.join(templates_apply_path, template_file)
       end
@@ -29,6 +29,31 @@ module Palmade::Cableguy
       else
         raise ArgumentError, "template file %s not found" % template_path
       end
+    end
+
+    protected
+
+    def determine_template_path(cabler, template_file)
+      try_template_path = File.join(cabler.templates_path,
+                                    variant_fname(cabler, template_file))
+
+      if File.exists?(try_template_path)
+        try_template_path
+      else
+        File.join(cabler.templates_path, template_file)
+      end
+    end
+
+    def variant_fname(cabler, template_file)
+      target = cabler.target
+
+      extname = File.extname(template_file)
+      fname = File.basename(template_file, extname)
+      extname.sub!(/^\./, '')
+
+      vfname = [ fname, target ].join('.')
+      vfname = [ vfname, extname ].join('.') unless extname.empty?
+      vfname
     end
   end
 end

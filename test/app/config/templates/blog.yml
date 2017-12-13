@@ -8,3 +8,7 @@ database:
   port: {db.port}
   username: {db.username}
   password: {db.password}
+
+escaped:
+  not_escaped: <%= '1' %>
+  escaped: [%= runtime_test_value %]

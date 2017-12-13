@@ -72,6 +72,10 @@ module Palmade::Cableguy
       end
     end
 
+    def on(target, &block)
+      yield if @cabler.target == target
+    end
+
     def configured?
       @sections.include?(:cabling)
     end
