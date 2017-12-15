@@ -90,10 +90,16 @@ module Palmade::Cableguy
     end
 
     def final_value(group, key, value)
-      val_key = '%s:%s' % [ group, key ]
-
       g = @cabler.values.fetch(group, { })
       g.fetch(key, value)
+    end
+
+    def final_values(group = nil)
+      if group.nil?
+        @cabler.values
+      else
+        @cabler.values.fetch(group, { })
+      end
     end
 
     def set(key, value, group = nil)
@@ -123,32 +129,48 @@ module Palmade::Cableguy
     def has_key?(key, group = nil)
       key, group = final_key(key, group)
 
-      val = @dataset.where(:key => key, :group => group).count
-      if val == 0
-        val = @dataset.where(:key => key, :group => GLOBAL_GROUP).count
-        val == 0 ? false : true
+      if empty?
+        final_values(group).has_key?(key)
       else
-        true
+        val = @dataset.where(:key => key, :group => group).count
+        if val == 0
+          val = @dataset.where(:key => key, :group => GLOBAL_GROUP).count
+          val == 0 ? false : true
+        else
+          true
+        end
       end
     end
 
     def get(key, group = nil)
-      key, group = final_key(key, group)
-
-      val = @dataset.where(:key => key, :group => group)
-      if val.empty?
-        val = @dataset.where(:key => key, :group => GLOBAL_GROUP)
-      end
-
-      if val.count > 0
-        val.first[:value]
+      if empty?
+        get_from_values(key, group)
       else
-        raise "key \'%s\' cannot be found!" % key
+        key, group = final_key(key, group)
+        g = final_values(group)
+
+        val = @dataset.where(:key => key, :group => group)
+        if val.empty?
+          val = @dataset.where(:key => key, :group => GLOBAL_GROUP)
+        end
+
+        if val.count > 0
+          val.first[:value]
+        elsif g.has_key?(key)
+          g.fetch(key, nil)
+        else
+          raise "key \'%s\' cannot be found!" % key
+        end
       end
     end
 
+    def get_from_values(key, group = nil)
+      key, group = final_key(key, group)
+      final_values(group).fetch(key, nil)
+    end
+
     def get_if_key_exists(key, group = nil)
-      get(key, group) if has_key?(key, group)
+      has_key?(key, group) ? get(key, group) : nil
     end
 
     def get_children(key, group = nil)

@@ -95,8 +95,8 @@ module Palmade::Cableguy
       @save_db = determine_save_db
       @db = Palmade::Cableguy::DB.new(self, { :save_db => @save_db }).boot
 
-      load_cabling_values
       load_cablefile
+      load_cabling_values
 
       self
     end
@@ -139,7 +139,6 @@ module Palmade::Cableguy
 
       if @db.empty?
         cabling_paths = determine_useable_cabling_paths
-        warn 'WARN: Empty config data from %s, did you provide some cabling data?' % cabling_paths.inspect
       end
 
       if @cablefile.configured?
@@ -288,9 +287,30 @@ module Palmade::Cableguy
     end
 
     def load_cabling_values
-      if !@values_path.nil? && File.exist?(@values_path)
-        @cabling_values = Palmade::Cableguy::CablingValues.load_cabling_values(self, @values_path)
-      else
+      @cabling_values = nil
+
+      if !@values_path.nil?
+        unless @app_group.nil?
+          values_path_dir = File.dirname(@values_path)
+          extname = File.extname(@values_path)
+          fname = File.basename(@values_path, extname)
+          extname.sub!(/^\./, '')
+
+          app_vfname = [ fname, @app_group ].join('.')
+          app_vfname = [ app_vfname, extname ].join('.') unless extname.empty?
+          app_values_path = File.join(values_path_dir, app_vfname)
+
+          if File.exists?(app_values_path)
+            @cabling_values = Palmade::Cableguy::CablingValues.load_cabling_values(self, app_values_path)
+          end
+        end
+
+        if @cabling_values.nil? && File.exist?(@values_path)
+          @cabling_values = Palmade::Cableguy::CablingValues.load_cabling_values(self, @values_path)
+        end
+      end
+
+      if @cabling_values.nil?
         @cabling_values = Palmade::Cableguy::CablingValues.new_empty(self)
       end
     end
