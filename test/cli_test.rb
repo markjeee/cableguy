@@ -61,11 +61,7 @@ class CliTest < MiniTest::Test
     end
 
     values_path = File.expand_path(DEFAULT_CABLING_VALUES_PATH)
-    if File.exists?(values_path)
-      assert_equal(values_path, @default_cabler.values_path)
-    else
-      assert_nil(@default_cabler.values_path, 'Default cabling values path is not nil')
-    end
+    assert_equal(values_path, @default_cabler.values_path)
   end
 
   def test_cabling_defaults_will_raise_error

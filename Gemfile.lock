@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cableguy (0.5.1.pre8)
+    cableguy (0.5.1.pre9)
       sequel
       sqlite3
       thor
