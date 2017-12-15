@@ -1,5 +1,5 @@
 module Palmade
   module Cableguy
-    VERSION = '0.5.1.pre4'
+    VERSION = '0.5.1.pre8'
   end
 end

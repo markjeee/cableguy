@@ -8,6 +8,7 @@ module Palmade::Cableguy
       CableCustom
       CableMove
       CableCopy
+      CableDotenv
     end
 
     autoload :CableChmod,'palmade/cableguy/builders/cable_chmod'
@@ -17,5 +18,6 @@ module Palmade::Cableguy
     autoload :CableTemplate,'palmade/cableguy/builders/cable_template'
     autoload :CableMove,'palmade/cableguy/builders/cable_move'
     autoload :CableCopy,'palmade/cableguy/builders/cable_copy'
+    autoload :CableDotenv,'palmade/cableguy/builders/cable_dotenv'
   end
 end
