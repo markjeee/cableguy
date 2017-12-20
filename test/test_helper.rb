@@ -27,7 +27,8 @@ module TestHelper
       :values_path => TEST_CABLING_VALUES_PATH,
       :target => :test,
       :location => nil,
-      :include_global_cabling => true
+      :include_global_cabling => true,
+      :silent => true
     }.merge(options)
 
     Palmade::Cableguy.boot_cabler(app_root || TEST_APP_ROOT, opts)

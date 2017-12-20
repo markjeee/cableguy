@@ -142,9 +142,9 @@ module Palmade::Cableguy
       end
     end
 
-    def get(key, group = nil)
+    def get(key, group = nil, default_value = nil)
       if empty?
-        get_from_values(key, group)
+        get_from_values(key, group, default_value)
       else
         key, group = final_key(key, group)
         g = final_values(group)
@@ -158,43 +158,21 @@ module Palmade::Cableguy
           val.first[:value]
         elsif g.has_key?(key)
           g.fetch(key, nil)
+        elsif !default_value.nil?
+          default_value
         else
           raise "key \'%s\' cannot be found!" % key
         end
       end
     end
 
-    def get_from_values(key, group = nil)
+    def get_from_values(key, group = nil, default_value = nil)
       key, group = final_key(key, group)
-      final_values(group).fetch(key, nil)
+      final_values(group).fetch(key, default_value)
     end
 
     def get_if_key_exists(key, group = nil)
       has_key?(key, group) ? get(key, group) : nil
-    end
-
-    def get_children(key, group = nil)
-      key, group = final_key(key, group)
-
-      values = [ ]
-      res = @dataset.where(Sequel.like(:key, "#{key}%"), :group => group)
-      if res.empty?
-        res = @dataset.where(Sequel.like(:key, "#{key}%"), :group => GLOBAL_GROUP)
-      end
-
-      key = key.split('.')
-
-      res.each do |r|
-        res_key = r[:key].split('.')
-        res_key = (res_key - key).shift
-        values.push(res_key)
-      end
-
-      if values.count > 0
-        values & values
-      else
-        raise "no values for \'%s\'!" % key
-      end
     end
 
     def empty?
@@ -224,6 +202,32 @@ module Palmade::Cableguy
           String :value
           String :group
         end
+      end
+    end
+
+    # NOTICE as of 2107-12-20
+    # will soon be deprecated!!!
+    def get_children(key, group = nil)
+      key, group = final_key(key, group)
+
+      values = [ ]
+      res = @dataset.where(Sequel.like(:key, "#{key}%"), :group => group)
+      if res.empty?
+        res = @dataset.where(Sequel.like(:key, "#{key}%"), :group => GLOBAL_GROUP)
+      end
+
+      key = key.split('.')
+
+      res.each do |r|
+        res_key = r[:key].split('.')
+        res_key = (res_key - key).shift
+        values.push(res_key)
+      end
+
+      if values.count > 0
+        values & values
+      else
+        raise "no values for \'%s\'!" % key
       end
     end
   end

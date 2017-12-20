@@ -16,6 +16,8 @@ module Palmade::Cableguy
       end
 
       env_file_path = File.join(cabler.determine_apply_path, env_file)
+
+      cabler.say('Setup dotenv: %s' % File.basename(env_file_path), true)
       generate_dotenv_file(cabler, env_file_path, vkey)
     end
 

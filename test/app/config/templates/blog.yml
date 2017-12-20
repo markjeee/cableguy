@@ -12,3 +12,6 @@ database:
 escaped:
   not_escaped: <%= '1' %>
   escaped: [%= runtime_test_value %]
+
+use_default_value:
+  value: {do_not_exist_key|default_value}

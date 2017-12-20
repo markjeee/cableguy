@@ -47,12 +47,12 @@ module Palmade::Cableguy
       @db.get_if_key_exists(key, group)
     end
 
-    def get(key, group = nil)
+    def get(key, group = nil, default_value = nil)
       if !@key_prefix.empty?
         key = join_keys(key)
       end
 
-      @db.get(key, group)
+      @db.get(key, group, default_value)
     end
 
     def get_children(key, group = nil, &block)
@@ -111,16 +111,17 @@ module Palmade::Cableguy
       delim0 = "\\%s" % delim[0]
       delim1 = "\\%s" % delim[1]
 
-      holders_re = '%s(([A-Za-z0-9\_]+)\:)?([A-Za-z0-9\.\_\-]+)%s' % [ delim0, delim1 ]
+      holders_re = '%s(([A-Za-z0-9\_]+)\:)?([A-Za-z0-9\.\_\-]+)(\|([^%s]+))?%s' % [ delim0, delim1, delim1 ]
 
       parsed = parsed.gsub(/#{holders_re}/) do |match|
         group = $2
         found = $3
+        default_value = $5
 
         if @reserved_keys.include?(found)
           eval_ret = self.send(found)
         else
-          eval_ret = get(found, group)
+          eval_ret = get(found, group, default_value)
         end
       end
     end

@@ -12,6 +12,7 @@ module Palmade::Cableguy
         target_path = File.join(templates_apply_path, template_file)
       end
 
+      cabler.say('Setup template: %s' % File.basename(template_file), true)
       install_template(template_file, cabler, target_path)
     end
 

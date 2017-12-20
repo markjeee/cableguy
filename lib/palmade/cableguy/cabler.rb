@@ -17,7 +17,8 @@ module Palmade::Cableguy
       :logger => nil,
       :save_db => false,
       :unload_cabling => true,
-      :include_global_cabling => false
+      :include_global_cabling => false,
+      :silent => false
     }
 
     attr_reader :app_root
@@ -81,15 +82,11 @@ module Palmade::Cableguy
 
       @migrator = nil
       @app_migrator = nil
+
+      @silent = options[:silent]
     end
 
     def boot
-      if @options[:verbose]
-        @logger.level = Logger::DEBUG
-      else
-        @logger.level = Logger::WARN
-      end
-
       if @values_path.nil?
         @values_path = File.expand_path(DEFAULT_CABLING_VALUES_PATH)
       end
@@ -137,7 +134,11 @@ module Palmade::Cableguy
     end
 
     def configure
+      say '== Configuring %s ==' % determine_apply_path
+
       unless @db.migrated?
+        say 'Loading configure data', true
+
         migrate
       end
 
@@ -147,6 +148,7 @@ module Palmade::Cableguy
 
       if @cablefile.configured?
         check_requirements
+
         builds = build_setups
         builds.each do |s|
           s.configure(self)
@@ -154,6 +156,8 @@ module Palmade::Cableguy
       else
         raise 'Cablefile not configured or not loaded, configure will not work!'
       end
+
+      say '== Configure done =='
 
       self
     end
@@ -202,6 +206,16 @@ module Palmade::Cableguy
       end
 
       migrate
+    end
+
+    def say(msg, nested = false)
+      unless @silent
+        if nested
+          puts '  -- %s' % msg
+        else
+          puts msg
+        end
+      end
     end
 
     protected
@@ -338,7 +352,9 @@ module Palmade::Cableguy
     end
 
     def create_logger
-      Logger.new($stdout)
+      l = Logger.new($stdout)
+      l.level = Logger::WARN
+      l
     end
   end
 end
