@@ -26,7 +26,7 @@ module Palmade::Cableguy
     end
 
     def register_hooks
-      after 'deploy:updated', 'cableguy:cable'
+      after 'bundler:install', 'cableguy:cable'
     end
   end
 end
