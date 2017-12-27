@@ -1,8 +1,11 @@
+require 'cableguy'
+
 module Palmade
   module Cableguy
     autoload :Builders, 'palmade/cableguy/builders'
     autoload :Cable, 'palmade/cableguy/cable'
     autoload :Cabler, 'palmade/cableguy/cabler'
+    autoload :Env, 'palmade/cableguy/env'
 
     autoload :CLI, 'palmade/cableguy/cli'
     autoload :CliHelper, 'palmade/cableguy/cli_helper'

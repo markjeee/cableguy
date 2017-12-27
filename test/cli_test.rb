@@ -3,6 +3,7 @@ require 'minitest/autorun'
 
 class CliTest < MiniTest::Test
   include Palmade::Cableguy::Constants
+  include TestHelper
 
   def setup
     @cli = TestHelper.new_cli_tester('configure')
@@ -75,7 +76,7 @@ class CliTest < MiniTest::Test
   end
 
   def test_lock_defaults_target
-    assert_equal(DEFAULT_TARGET, @lock_opts[:target])
+    assert_equal(TEST_CABLE_TARGET, @lock_opts[:target])
   end
 
   def test_lock_defaults_location

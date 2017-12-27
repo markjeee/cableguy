@@ -12,7 +12,7 @@ end
 
 task :default => :test
 
-desc "Perform gem build and push to Gemfury as 'nlevel'"
+desc "Perform gem build and push to Gemfury as 'cebucodecamp'"
 task :fury_release do
   Rake::Task['fury:release'].invoke(nil, 'cebucodecamp')
 end

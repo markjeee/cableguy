@@ -9,7 +9,7 @@ module Palmade::Cableguy
     DEFAULT_CABLING_PATH = File.join(ENV['HOME'], 'cabling')
     DEFAULT_CABLING_VALUES_PATH = File.join(ENV['HOME'], '.cabling_values.yml')
 
-    DEFAULT_LOCK_FILE = File.join('.cabling.yml')
+    DEFAULT_LOCK_FILE = '.cabling.yml'
     DEFAULT_LOCK_PATH = File.join(ENV['HOME'], DEFAULT_LOCK_FILE)
 
     DEFAULT_TARGET = 'development'

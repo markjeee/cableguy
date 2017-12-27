@@ -16,10 +16,19 @@ module TestHelper
   TEST_CABLING_VALUES_PATH = File.join(CABLEGUY_TEST_PATH, '.cabling_values.yml')
 
   TEST_CONFIG_YML = File.join(TEST_APP_ROOT, 'config/blog.yml')
+  TEST_CABLING_LOCK = File.join(TEST_APP_ROOT, '.cabling.yml')
+  TEST_CABLEFILE = File.join(TEST_APP_ROOT, 'Cablefile')
+
+  TEST_CABLE_TARGET = 'test'
 
   Palmade::Cableguy::Constants::DEFAULT_LOCK_PATH.replace('')
 
   @@runtime_test_value = nil
+
+  def self.env_setup
+    ENV['CABLEGUY_CABLEFILE'] = TEST_CABLEFILE
+    Palmade::Cableguy::Env.setup
+  end
 
   def self.configure(app_root = nil, options = { })
     opts = {
@@ -39,9 +48,9 @@ module TestHelper
       args = [ '--silent',
                '--app-root=%s' % TestHelper::TEST_APP_ROOT,
                '--include-global-cabling',
-               '--nolock',
                '--path=%s' % TestHelper::TEST_CABLING_PATH,
-               '--values-path=%s' % TestHelper::TEST_CABLING_VALUES_PATH
+               '--values-path=%s' % TestHelper::TEST_CABLING_VALUES_PATH,
+               '--target=%s' % TEST_CABLE_TARGET
              ]
     else
       args += [ '--silent',
@@ -66,6 +75,14 @@ module TestHelper
     cli
   end
 
+  def self.simulate_after_cable
+    cli = TestHelper.new_cli_tester('configure')
+    cli.prepare_lock_file
+    cli.cabler.configure
+
+    cli
+  end
+
   def self.unload_cabling
     if defined?(TestCableguyCabling::Base::Blog)
       TestCableguyCabling::Base.send(:remove_const, :Blog)
@@ -73,6 +90,11 @@ module TestHelper
 
     if defined?(TestCableguyAppCabling::Base::Blog)
       TestCableguyAppCabling::Base.send(:remove_const, :Blog)
+    end
+
+    # remove lock file
+    if File.exists?(TEST_CABLING_LOCK)
+      FileUtils.rm(TEST_CABLING_LOCK)
     end
   end
 

@@ -5,7 +5,7 @@ class CliLockTest < MiniTest::Test
   include Palmade::Cableguy::Constants
 
   def setup
-    @test_cli = TestHelper.new_cli_tester('configure', [ '--target=test' ])
+    @test_cli = TestHelper.new_cli_tester('configure')
     @another_cli = TestHelper.new_cli_tester('configure', [ ])
   end
 
