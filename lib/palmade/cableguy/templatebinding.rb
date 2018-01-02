@@ -101,10 +101,12 @@ module Palmade::Cableguy
     def translate_escaped(parsed)
       translate_map = {
         '[%' => '<%',
-        '%]' => '%>'
+        '%]' => '%>',
+        '\{' => '{',
+        '\}' => '}'
       }
 
-      parsed.gsub(/(\[\%)|(\%\])/, translate_map)
+      parsed.gsub(/(\[\%)|(\%\])|(\\\{)|(\\\})/, translate_map)
     end
 
     def special_parse(parsed, delim = [ '{', '}' ], cabling_only = false)
