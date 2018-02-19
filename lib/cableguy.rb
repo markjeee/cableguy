@@ -24,4 +24,8 @@ module Cableguy
   def self.on_location(*locations)
     yield if locations.include?(env.location)
   end
+
+  def self.load_dotenv
+    Palmade::Cableguy::DotenvHelper.load_dotenv
+  end
 end

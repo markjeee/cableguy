@@ -5,9 +5,9 @@ Gem::Specification.new do |s|
   s.name        = 'cableguy'
   s.version     = Palmade::Cableguy::VERSION
 
-  s.authors     = [ 'Cebu Code Campers' ]
-  s.email       = [ 'core@cebucodecamp.org' ]
-  s.homepage    = 'https://github.com/cebucodecamp/cableguy'
+  s.authors     = [ 'Next Level' ]
+  s.email       = [ 'crew@nlevel.io' ]
+  s.homepage    = 'https://github.com/nlevel/cableguy'
 
   s.summary     = %q{Generate configurations based on a template and a cabling database}
   s.description = %q{Generate configurations based on a template and a cabling database}

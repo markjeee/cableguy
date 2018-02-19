@@ -1,5 +1,5 @@
 require 'capistrano/bundler'
-require "capistrano/plugin"
+require 'capistrano/plugin'
 
 module Palmade::Cableguy
   class CapistranoTasks < Capistrano::Plugin

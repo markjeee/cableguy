@@ -24,6 +24,7 @@ module Palmade
     autoload :Utils, 'palmade/cableguy/utils'
     autoload :VERSION, 'palmade/cableguy/version'
 
+    autoload :DotenvHelper, 'palmade/cableguy/dotenv_helper'
     autoload :CapistranoTasks, 'palmade/cableguy/capistrano_tasks'
 
     def self.boot_cabler(app_path, opts = { })
