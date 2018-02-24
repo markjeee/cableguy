@@ -1,4 +1,4 @@
-$:.push File.expand_path("../lib", __FILE__)
+$:.push File.expand_path('../lib', __FILE__)
 require 'palmade/cableguy/version'
 
 require 'bundler/gem_tasks'
@@ -14,5 +14,5 @@ task :default => :test
 
 desc "Perform gem build and push to Gemfury as 'nlevel'"
 task :fury_release do
-  Rake::Task['fury:release'].invoke(nil, 'nlevel')
+  Rake::Task['fury:release'].invoke('cableguy', 'nlevel')
 end
